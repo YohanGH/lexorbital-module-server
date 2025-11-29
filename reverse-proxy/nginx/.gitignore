@@ -1,11 +1,42 @@
+# ============================================================================
+# .gitignore pour Nginx - Protection des données sensibles
+# ============================================================================
+
 # Certificats SSL (ne jamais versionner)
 ssl/
 *.pem
 *.key
 *.crt
 *.cert
+*.csr
 
-# Configurations de production (contiennent des secrets)
-reverse-proxy.conf
-!reverse-proxy.conf.example
+# Configurations spécifiques contenant des données sensibles
+# ⚠️ Ne jamais commit de fichiers avec :
+#    - Domaines réels
+#    - IP publiques
+#    - Noms de services/containers spécifiques
+#    - Chemins personnalisés
+
+# Ignorer toutes les configs spécifiques
+sites-available/*
+sites-enabled/*
+
+# Mais autoriser les templates/exemples
+!sites-available/example.conf
+!sites-enabled/.gitkeep
+
+# Logs
+*.log
+logs/
+access.log*
+error.log*
+
+# Backups
+*.bak
+*.old
+*~
+
+# Configurations temporaires
+*.tmp
+*.swp
 

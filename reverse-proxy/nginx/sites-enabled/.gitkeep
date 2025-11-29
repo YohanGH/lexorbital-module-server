@@ -1,0 +1,3 @@
+# This file ensures the sites-enabled directory is tracked by git
+# Symbolic links to enabled site configurations will be created here
+
