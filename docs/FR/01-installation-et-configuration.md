@@ -1,5 +1,10 @@
+# 01 — Installation et configuration (après clone)
 
-# Installation et configuration (après clone)
+Ce document décrit l'installation de LexOrbital après avoir préparé le serveur selon le document `00-serveur-prerequis.md`.
+
+> **⚠️ Document PUBLIC-SAFE :** Les domaines et URLs utilisent `example.com` comme exemple. Remplacez par vos valeurs réelles.
+
+---
 
 ## 1. Cloner le module
 
@@ -7,68 +12,81 @@ Connecté en utilisateur non-root :
 
 ```bash
 cd /srv/lexorbital
-git clone https://github.com/.../lexorbital-module-infra-server.git
-cd lexorbital-module-infra-server
+git clone https://github.com/your-org/lexorbital-module-server.git
+cd lexorbital-module-server
 ```
 
-2. Installer Docker + Docker Compose + Docker Swarm (optionnel)
-Ajouter le dépôt Docker :
+---
+
+## 2. Configuration des secrets Docker (si utilisation de Swarm)
+
+Si vous utilisez Docker Swarm pour gérer les secrets de manière sécurisée :
 
 ```bash
-sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-sudo chmod a+r /etc/apt/keyrings/docker.gpg
-```
-
-Installer Docker :
-
-```bash
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-```
-
-Activer Docker Swarm (optionnel)
-
-```bash
+# Initialiser Swarm (une seule fois)
 sudo docker swarm init
+
+# Créer les secrets
+echo "db_username" | docker secret create postgres_user -
+echo "SECURE_PASSWORD_HERE" | docker secret create postgres_password -
+echo "postgresql://db_username:SECURE_PASSWORD_HERE@postgres:5432/myapp_db" | docker secret create database_url -
+echo "YOUR_JWT_SECRET_HERE" | docker secret create jwt_secret -
+echo "YOUR_API_KEY_HERE" | docker secret create api_key -
 ```
 
-3. Préparer les secrets (mode Swarm)
+> **Important :** Remplacez toutes les valeurs d'exemple par vos propres credentials sécurisés.
+
+---
+
+## 3. Configuration du reverse proxy Nginx
+
+Copier la configuration template et l'adapter :
 
 ```bash
-echo "postgres_user" | docker secret create postgres_user -
-echo "PASSWORD_SECURISE" | docker secret create postgres_password -
-echo "postgresql://postgres_user:PASSWORD_SECURISE@postgres:5432/lexorbital" | docker secret create database_url -
-echo "JWTSECRET" | docker secret create jwt_secret -
-echo "APIKEY" | docker secret create api_key -
-etc
+sudo cp reverse-proxy/nginx/sites-available/example.conf /etc/nginx/sites-available/lexorbital.conf
+sudo nano /etc/nginx/sites-available/lexorbital.conf
 ```
 
-4. Installer le webhook (si utilisé)
-Voir docs/05-webhook-setup.md.
+Dans le fichier, remplacer :
+- `example.com` → votre domaine réel
+- `lexorbital-frontend` / `lexorbital-backend` → noms de vos containers Docker
 
-5. Configuration du reverse proxy
-Choisir Nginx (prod)
-Copier le fichier :
+Activer la configuration :
 
 ```bash
-sudo cp nginx/lexorbital.conf /etc/nginx/sites-available/lexorbital.conf
 sudo ln -s /etc/nginx/sites-available/lexorbital.conf /etc/nginx/sites-enabled/
 sudo nginx -t
-sudo systemctl restart nginx
+sudo systemctl reload nginx
 ```
 
-Ou utiliser Caddy (exemple)
-Voir caddy/Caddyfile.example.
+---
 
-6. Déploiement initial
-Mode Compose
+## 4. Déploiement initial
+
+### Mode Docker Compose (simple)
 
 ```bash
-./scripts/deploy-compose.sh
+docker compose -f docker/docker-compose.prod.yml up -d
 ```
-Mode Swarm
+
+### Mode Docker Swarm (avancé)
 
 ```bash
-./scripts/deploy-swarm.sh
+docker stack deploy -c docker/docker-compose.prod.yml myapp-stack
+```
+
+---
+
+## 5. Vérification du déploiement
+
+```bash
+# Vérifier les containers
+docker ps
+
+# Vérifier les logs
+docker compose logs -f
+
+# Tester les endpoints
+curl https://example.com/health
+curl https://api.example.com/health
 ```

@@ -1,30 +1,30 @@
-# 00 — Préparation du serveur de production (avant déploiement)
+# 00 — Préparation du serveur LexOrbital (avant clone)
 
-Ce document décrit les **préconditions obligatoires** pour préparer un serveur Linux de production sécurisé et conforme RGPD.
+Ce document décrit les **préconditions obligatoires** pour installer un serveur LexOrbital.
+À exécuter **avant de cloner** le module `lexorbital-module-server`.
 
-**À exécuter AVANT de déployer votre application.**
-
-> **⚠️ Document PUBLIC-SAFE :** Ce guide utilise des valeurs d'exemple (`example.com`, `myapp`, etc.). Remplacez-les par vos propres valeurs lors de la mise en œuvre.
+> **⚠️ Document PUBLIC-SAFE :** Ce guide utilise des valeurs d'exemple pour les données sensibles (domaines, ports, IPs). Remplacez-les par vos propres valeurs lors de la mise en œuvre.
 
 ---
 
 ## 0. Préparation du serveur
 
-**Checklist des prérequis :**
+**Checklist des prérequis minimaux :**
 
 - [ ] Mise à jour de l'OS
-- [ ] Pare-feu minimal strict (iptables ou UFW)
-- [ ] SSH sécurisé (clé publique + port non-standard + root désactivé)
-- [ ] Fail2ban configuré
+- [ ] SSH sécurisé de base (clé publique + port non-standard + root désactivé)
+- [ ] Pare-feu UFW minimal (ports essentiels)
 - [ ] Désactivation des services inutiles
 - [ ] Vérification disque / partitions
 - [ ] Synchronisation horaire (NTP / chrony)
-- [ ] Journalisation conforme RGPD (journald + logrotate)
-- [ ] Création d'un utilisateur système applicatif non-root
+- [ ] Journalisation de base (journald)
+- [ ] Création de l'utilisateur système « lexorbital »
 - [ ] Installation Docker + groupe docker
 - [ ] Installation Nginx (reverse proxy global)
 - [ ] Préparation DNS pour domaine + sous-domaines
 - [ ] Génération certificats TLS (Let's Encrypt / Certbot)
+
+> **Note :** Pour le durcissement avancé (fail2ban, monitoring, permissions fines), voir les documents `03-renforcement-de-la-securite.md` et `04-utilisateurs-et-autorisations.md`.
 
 ---
 
@@ -36,7 +36,7 @@ sudo apt autoremove -y
 ```
 
 
-### 2. Sécurisation SSH
+### 2. Sécurisation SSH de base
 
 Modifier le mot de passe root :
 
@@ -44,21 +44,19 @@ Modifier le mot de passe root :
 sudo passwd root
 ```
 
-Changer le port SSH (recommandé 49152–65535) :
+Configurer SSH :
 
 ```bash
 sudo nano /etc/ssh/sshd_config
-# Port XXXXX  # ⚠️ Remplacer par un port de votre choix entre 49152-65535
 ```
 
-> **Note de sécurité :** Choisir un port non-standard pour SSH réduira les tentatives d'accès automatisées. Conservez ce port en lieu sûr.
+Paramètres minimaux à configurer :
 
-Désactiver l'accès root et l'authentification par mot de passe :
-
-```bash
-# Dans /etc/ssh/sshd_config
+```
+Port XXXXX  # ⚠️ Remplacer par un port entre 49152-65535
 PermitRootLogin no
 PasswordAuthentication no
+PubkeyAuthentication yes
 ```
 
 Redémarrer SSH :
@@ -67,7 +65,7 @@ Redémarrer SSH :
 sudo systemctl restart sshd
 ```
 
-Ajouter la clé SSH publique :
+Ajouter votre clé SSH publique :
 
 ```bash
 mkdir -p ~/.ssh
@@ -77,28 +75,35 @@ nano ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
 ```
 
+> **Pour la configuration avancée** (fail2ban, timeouts, etc.), voir `03-renforcement-de-la-securite.md`.
+
 
 ### 3. Installation des dépendances minimales
 
 ```bash
-sudo apt install -y curl git ufw fail2ban htop ca-certificates gnupg lsb-release chrony
+sudo apt install -y curl git ufw htop ca-certificates gnupg lsb-release chrony
 ```
 
+> **Note :** Fail2ban sera configuré dans `03-renforcement-de-la-securite.md` après le déploiement.
 
-### 4. Pare-feu UFW (version simple)
+
+### 4. Pare-feu UFW (configuration minimale)
 
 ```bash
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 
 sudo ufw allow XXXXX/tcp  # ⚠️ Remplacer par votre port SSH personnalisé
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
+sudo ufw allow 80/tcp     # HTTP
+sudo ufw allow 443/tcp    # HTTPS
 
 sudo ufw enable
+sudo ufw status
 ```
 
-> **Important :** Remplacez `XXXXX` par le port SSH que vous avez configuré à l'étape 2.
+> **Important :** Remplacez `XXXXX` par le port SSH configuré à l'étape 2.
+> 
+> **Pour des règles avancées** (rate limiting, règles spécifiques), voir `03-renforcement-de-la-securite.md`.
 
 
 ### 5. Désactivation des services inutiles
@@ -130,9 +135,9 @@ lsblk
 ```
 
 
-### 7. Journalisation conforme RGPD
+### 7. Journalisation de base (RGPD)
 
-Limiter la taille et la durée des logs systemd :
+Configurer les limites de logs systemd :
 
 ```bash
 sudo nano /etc/systemd/journald.conf
@@ -143,7 +148,7 @@ Ajouter les paramètres suivants :
 ```
 SystemMaxUse=200M
 SystemMaxFileSize=20M
-MaxRetentionSec=2592000
+MaxRetentionSec=2592000  # 30 jours
 ```
 
 Redémarrer journald :
@@ -152,56 +157,26 @@ Redémarrer journald :
 sudo systemctl restart systemd-journald
 ```
 
-Installer logrotate :
+> **Pour la configuration avancée** (logrotate détaillé pour Nginx, rétention spécifique), voir `03-renforcement-de-la-securite.md`.
+
+
+### 8. Création de l'utilisateur système lexorbital
+
+Créer le groupe et l'utilisateur :
 
 ```bash
-sudo apt install logrotate -y
+sudo groupadd lexorbital
+sudo adduser --system --shell /usr/sbin/nologin --home /srv/lexorbital --ingroup lexorbital lexorbital
 ```
 
-### Nettoyage / maintenance système
+Créer le répertoire de travail :
 
 ```bash
-sudo apt install unattended-upgrades
-sudo dpkg-reconfigure unattended-upgrades
+sudo mkdir -p /srv/lexorbital
+sudo chown -R lexorbital:lexorbital /srv/lexorbital
 ```
 
-
-### 8. Création de l'utilisateur système applicatif
-
-Créer le groupe (remplacer `myapp` par le nom de votre application) :
-
-```bash
-sudo groupadd myapp
-```
-
-Créer l'utilisateur système :
-
-```bash
-sudo adduser --system --shell /usr/sbin/nologin --home /srv/myapp myapp
-sudo usermod -g myapp myapp
-```
-
-Donner les permissions :
-
-```bash
-sudo mkdir -p /srv/myapp
-sudo chown -R myapp:myapp /srv/myapp
-```
-
-Pour entrer dans cet utilisateur (debug/maintenance) :
-```bash
-sudo su -s /bin/bash myapp
-```
-
-Pour aller dans son home :
-```bash
-cd /srv/myapp
-```
-
-Pour sortir :
-```bash
-exit
-```
+> **Pour la gestion détaillée des permissions** (fichiers sensibles, logs, backups, audit), voir `04-utilisateurs-et-autorisations.md`.
 
 ### 9. Installation de Docker et Docker Compose
 
@@ -215,10 +190,10 @@ Créer le groupe docker si nécessaire :
 sudo groupadd docker
 ```
 
-Ajouter votre utilisateur applicatif au groupe docker :
+Ajouter l'utilisateur lexorbital au groupe docker :
 
 ```bash
-sudo usermod -aG docker myapp  # Remplacer myapp par votre utilisateur
+sudo usermod -aG docker lexorbital
 ```
 
 Recharger les groupes :
@@ -282,7 +257,7 @@ nslookup example.com
 Créer un vhost minimal HTTP pour la validation Let's Encrypt :
 
 ```bash
-sudo nano /etc/nginx/sites-available/myapp.conf
+sudo nano /etc/nginx/sites-available/lexorbital.conf
 ```
 
 Contenu :
@@ -292,7 +267,7 @@ server {
     server_name example.com www.example.com api.example.com;
 
     location / {
-        return 200 "Server Ready\n";
+        return 200 "LexOrbital Server Ready\n";
         add_header Content-Type text/plain;
     }
 }
@@ -300,7 +275,7 @@ server {
 
 Activer la configuration :
 ```bash
-sudo ln -s /etc/nginx/sites-available/myapp.conf /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/lexorbital.conf /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 ```
@@ -338,17 +313,18 @@ sudo certbot renew --dry-run
 ### 15. Emplacement recommandé du dépôt
 
 ```bash
-/srv/myapp/  # Répertoire de l'application
+/srv/lexorbital/lexorbital-module-server
 ```
 
 ---
 
 ## ✓ Serveur prêt
 
-Le serveur est sécurisé, conforme RGPD/CNIL, et prêt pour le déploiement de l'application.
+Le serveur est sécurisé, conforme RGPD/CNIL, et prêt pour l'installation via `provisionning/` et `deploy/`.
 
 **Prochaines étapes :**
-1. Cloner le dépôt dans `/srv/myapp/`
+1. Cloner le dépôt dans `/srv/lexorbital/`
 2. Configurer les variables d'environnement
-3. Lancer les containers Docker
-4. Configurer le reverse proxy Nginx complet avec les bons `proxy_pass`
+3. Créer les secrets Docker
+4. Lancer les containers Docker
+5. Configurer le reverse proxy Nginx complet avec les bons `proxy_pass`

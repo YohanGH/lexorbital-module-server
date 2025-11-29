@@ -1,3 +1,11 @@
+# ============================================================================
+# Caddy Reverse Proxy - GDPR-Compliant Configuration Example
+# ============================================================================
+# ⚠️ EXAMPLE FILE - Replace all placeholders with your actual values:
+#    - example.com → your actual domain
+#    - myapp-backend → your backend container name
+# ============================================================================
+
 {
 	# Disable admin API (reduced attack surface)
 	admin off
@@ -8,16 +16,17 @@
 	}
 }
 
-lexorbital.local {
+example.com www.example.com {
 	encode gzip
 
-	# --- TLS: auto-cert for public domain, otherwise manual certs ---
-	# For a public domain:
-	# tls you@example.com
-	# For manual certs:
-	tls /etc/caddy/cert.pem /etc/caddy/key.pem {
-		protocols tls1.2 tls1.3
-	}
+	# --- TLS: Automatic Let's Encrypt certificate ---
+	# Replace with your email for Let's Encrypt notifications
+	tls admin@example.com
+
+	# For manual certificates (dev/staging):
+	# tls /etc/caddy/cert.pem /etc/caddy/key.pem {
+	#	protocols tls1.2 tls1.3
+	# }
 
 	# --- HSTS ---
 	header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -43,7 +52,7 @@ lexorbital.local {
 
 	# --- Backend API ---
 	handle_path /api/* {
-		reverse_proxy core-back:4000
+		reverse_proxy myapp-backend:4000  # ⚠️ Replace with your backend container name:port
 	}
 
 	# --- Health Check ---
@@ -55,7 +64,7 @@ lexorbital.local {
 
 	# --- Frontend SPA ---
 	handle {
-		root * /var/www/lexorbital-frontend
+		root * /var/www/frontend  # ⚠️ Replace with your frontend directory
 		file_server
 		try_files {path} /index.html
 	}

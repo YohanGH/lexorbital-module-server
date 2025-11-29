@@ -1,6 +1,6 @@
-# LexOrbital Module – Infra Server
+# Server Infrastructure Module – Production Deployment
 
-This module provides a reusable **server infrastructure foundation** for deploying LexOrbital on production servers:
+This module provides a reusable **server infrastructure foundation** for deploying applications on production servers:
 
 - Reverse proxy (Nginx in production),
 - Caddy example (optional),
@@ -23,20 +23,23 @@ This module provides a reusable **server infrastructure foundation** for deployi
 ## 2. Directory Structure
 
 ```text
-lexorbital-module-infra-server/
+server-infrastructure/
   /reverse-proxy/
     nginx/
-        nginx.conf          # Production Nginx configuration (official)
+        nginx.conf                    # Production Nginx configuration
+        sites-available/
+            example.conf              # Template configuration (PUBLIC-SAFE)
     caddy/
-        Caddyfile.example        # Caddy alternative (GDPR-friendly example)
+        Caddyfile.example            # Caddy alternative (GDPR-friendly example)
   docker/
-    docker-compose.prod.yml  # Stack front + back + DB + reverse proxy
-  scripts/
-    deploy-compose.sh
+    docker-compose.prod.yml.example  # Stack front + back + DB + reverse proxy
+  deploy/
+    deploy-compose-prod.sh
     deploy-swarm.sh
   docs/
-    RGPD-mesures-techniques.md
-    DRP.md
+    FR/
+        06-rgpd-mesures-techniques.md
+        07-drp.md
 ```
 
 5.1. "Simple" deployment (Compose)
@@ -67,9 +70,9 @@ The `nginx/nginx.conf` file:
 
 👉 **To adapt:**
 
-- `server_name`,  
-- paths to `cert.pem` and `key.pem`,  
-- upstream names (`core-front`, `core-back`) according to your Docker services.
+- `server_name` (replace `example.com` with your domain),  
+- paths to SSL certificates (Let's Encrypt paths or custom),  
+- upstream names (`myapp-frontend`, `myapp-backend`) according to your Docker services.
 
 ---
 
@@ -116,12 +119,12 @@ a team can choose to use Caddy instead of Nginx, provided they maintain the guar
 
 ## 5. Docker Compose / Swarm
 
-The `docker/docker-compose.prod.yml` file defines:
+The `docker/docker-compose.prod.yml.example` file defines:
 
-- `core-front` (frontend),  
-- `core-back` (API backend),  
+- `myapp-frontend` (frontend application),  
+- `myapp-backend` (API backend),  
 - `postgres` (database),  
-- a `reverse-proxy` service (Nginx).
+- Optional: `reverse-proxy` service (Nginx in container).
 
 ### Applied principles:
 
@@ -142,7 +145,7 @@ This document describes:
 - backups & restore tests (referenced with DRP.md),
 - link with GDPR Article 32 (processing security).
 
-It serves as technical support for the GDPR register of the LexOrbital Meta-Kernel.
+It serves as technical support for your GDPR compliance documentation.
 
 ## 7. TODO / Future Hardening
 
