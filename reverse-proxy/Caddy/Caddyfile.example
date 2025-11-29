@@ -1,0 +1,62 @@
+{
+	# Disable admin API (reduced attack surface)
+	admin off
+
+	# Supported HTTP protocols
+	servers {
+		protocols h1 h2 h3
+	}
+}
+
+lexorbital.local {
+	encode gzip
+
+	# --- TLS: auto-cert for public domain, otherwise manual certs ---
+	# For a public domain:
+	# tls you@example.com
+	# For manual certs:
+	tls /etc/caddy/cert.pem /etc/caddy/key.pem {
+		protocols tls1.2 tls1.3
+	}
+
+	# --- HSTS ---
+	header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+	# --- Security Headers ---
+	header X-Frame-Options "SAMEORIGIN"
+	header X-Content-Type-Options "nosniff"
+	header Referrer-Policy "strict-origin-when-cross-origin"
+	header Permissions-Policy "geolocation=(), microphone=(), camera=(), browsing-topics=()"
+
+	# --- CSP ---
+	header Content-Security-Policy "default-src 'self'; img-src 'self' data: https:; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https:; font-src 'self' data:; frame-ancestors 'self'"
+
+	# --- GDPR Logs: minimal format + rotation ---
+	log {
+		output file /var/log/caddy/access.log {
+			roll_size 10MB
+			roll_keep 30
+			roll_keep_for 720h  # ~30 days
+		}
+		format common_log
+	}
+
+	# --- Backend API ---
+	handle_path /api/* {
+		reverse_proxy core-back:4000
+	}
+
+	# --- Health Check ---
+	@health path /health
+	handle @health {
+		header Content-Type text/plain
+		respond "healthy"
+	}
+
+	# --- Frontend SPA ---
+	handle {
+		root * /var/www/lexorbital-frontend
+		file_server
+		try_files {path} /index.html
+	}
+}
