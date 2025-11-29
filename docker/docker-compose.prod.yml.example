@@ -1,29 +1,33 @@
 # ============================================================================
-# Docker Compose PRODUCTION - Architecture RGPD-Compliant avec isolation totale
+# Docker Compose PRODUCTION - GDPR-Compliant Architecture
 # ============================================================================
-# ⚠️ FICHIER D'EXEMPLE - À adapter selon votre environnement de production
+# ⚠️ EXAMPLE FILE - Adapt to your production environment
 # 
-# Sécurité: Isolation maximale, utilisateurs non-root, secrets, monitoring
-# Conformité: Réseaux internes, volumes chiffrés, audit trail, logs minimisés
+# Security: Maximum isolation, non-root users, secrets management, monitoring
+# Compliance: Internal networks, encrypted volumes, audit trail, minimal logs
 #
-# Usage: docker-compose -f docker-compose.prod.yml up -d
+# Usage: docker compose -f docker-compose.prod.yml up -d
+# 
+# ⚠️ Replace placeholders:
+#    - example.com → your domain
+#    - Build contexts (../frontend, ../backend) → your actual directories if different
 # ============================================================================
 
 services:
   # ============================================================================
-  # Zone Frontend - Production avec nginx
+  # Frontend Zone - Production with nginx
   # ============================================================================
   core-front:
     build:
       context: ../frontend
-      dockerfile: Dockerfile  # Utilise le Dockerfile de production (multi-stage)
+      dockerfile: Dockerfile  # Use production Dockerfile (multi-stage)
     container_name: lexorbital-front-ring-prod
-    # Sécurité: Pas de port exposé directement - Utiliser reverse-proxy
+    # Security: No exposed port - Use reverse proxy instead
     # ports:
-    #   - "8080:8080"  # Décommenter uniquement si pas de reverse-proxy
+    #   - "8080:8080"  # Uncomment only if not using reverse proxy
     environment:
       - NODE_ENV=production
-      - VITE_API_BACKEND_URL=https://api.lexorbital.local  # URL HTTPS
+      - VITE_API_BACKEND_URL=https://api.example.com  # ⚠️ Replace with your API URL
     # RGPD: Pas de volumes en production (code compilé dans l'image)
     # volumes: []  # Pas de volumes pour sécurité maximale
     networks:

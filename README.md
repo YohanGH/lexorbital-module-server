@@ -13,8 +13,8 @@ Production-ready server infrastructure module for LexOrbital with security and G
 
 ## 📚 Documentation
 
-- [Documentation EN](./docs/EN/) (Coming soon)
-- [Documentation FR](./docs/FR/00-serveur-prerequis.md)
+- [🇬🇧 Documentation EN](./docs/EN/README.md) (Coming soon)
+- [🇫🇷 Documentation FR](./docs/FR/README.md)
 
 ## 🚀 Quick Start
 

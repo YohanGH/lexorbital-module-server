@@ -1,8 +1,22 @@
+# ============================================================================
+# Crontab Example - Automated Backups and Maintenance
+# ============================================================================
+# ⚠️ EXAMPLE FILE - LexOrbital automated tasks
+# 
+# Install: sudo crontab -u lexorbital -e
+# ============================================================================
+
 # Database backup daily at 2:00 AM
-0 2 * * * /usr/local/bin/lexorbital-backup-db.sh
+0 2 * * * /usr/local/bin/lexorbital-backup-db.sh >> /var/log/lexorbital/backup.log 2>&1
 
 # File backup daily at 2:30 AM
-30 2 * * * /usr/local/bin/lexorbital-backup-files.sh
+30 2 * * * /usr/local/bin/lexorbital-backup-files.sh >> /var/log/lexorbital/backup.log 2>&1
 
-# Monthly restore test (test environment)
-0 3 1 * * /usr/local/bin/lexorbital-verify-restore.sh
+# Monthly restore test (test environment only)
+0 3 1 * * /usr/local/bin/lexorbital-verify-restore.sh >> /var/log/lexorbital/restore-test.log 2>&1
+
+# Weekly cleanup of old logs (retention: 30 days)
+0 4 * * 0 find /var/log/lexorbital -type f -mtime +30 -delete
+
+# Docker cleanup (remove unused images/containers)
+0 5 * * 0 /usr/bin/docker system prune -af --filter "until=168h" >> /var/log/lexorbital/docker-cleanup.log 2>&1
