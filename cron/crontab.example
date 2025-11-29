@@ -1,0 +1,8 @@
+# Database backup daily at 2:00 AM
+0 2 * * * /usr/local/bin/lexorbital-backup-db.sh
+
+# File backup daily at 2:30 AM
+30 2 * * * /usr/local/bin/lexorbital-backup-files.sh
+
+# Monthly restore test (test environment)
+0 3 1 * * /usr/local/bin/lexorbital-verify-restore.sh

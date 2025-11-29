@@ -1,0 +1,263 @@
+# ============================================================================
+# Docker Compose PRODUCTION - Architecture RGPD-Compliant avec isolation totale
+# ============================================================================
+# ⚠️ FICHIER D'EXEMPLE - À adapter selon votre environnement de production
+# 
+# Sécurité: Isolation maximale, utilisateurs non-root, secrets, monitoring
+# Conformité: Réseaux internes, volumes chiffrés, audit trail, logs minimisés
+#
+# Usage: docker-compose -f docker-compose.prod.yml up -d
+# ============================================================================
+
+services:
+  # ============================================================================
+  # Zone Frontend - Production avec nginx
+  # ============================================================================
+  core-front:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile  # Utilise le Dockerfile de production (multi-stage)
+    container_name: lexorbital-front-ring-prod
+    # Sécurité: Pas de port exposé directement - Utiliser reverse-proxy
+    # ports:
+    #   - "8080:8080"  # Décommenter uniquement si pas de reverse-proxy
+    environment:
+      - NODE_ENV=production
+      - VITE_API_BACKEND_URL=https://api.lexorbital.local  # URL HTTPS
+    # RGPD: Pas de volumes en production (code compilé dans l'image)
+    # volumes: []  # Pas de volumes pour sécurité maximale
+    networks:
+      - frontend-network
+    labels:
+      - "compliance.rgpd=by-design"
+      - "compliance.cnil=compliant"
+      - "data.location=EU"  # Adapter selon votre localisation
+      - "service.zone=frontend"
+      - "service.type=production"
+      - "security.scanning=enabled"
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        labels: "compliance.rgpd,service.zone"
+    # Sécurité: Limitation des ressources
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    # Sécurité: Pas de nouveaux privilèges
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      core-back:
+        condition: service_healthy
+
+  # ============================================================================
+  # Zone Backend - Production API
+  # ============================================================================
+  core-back:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: lexorbital-back-ring-prod
+    # Sécurité: Pas de port exposé - Communication interne uniquement
+    # ports: []  # Pas d'exposition directe
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      # RGPD: Utiliser Docker secrets pour les credentials
+      - DATABASE_URL_FILE=/run/secrets/database_url
+    # RGPD: Secrets Docker (à créer avec: echo "postgresql://..." | docker secret create database_url -)
+    secrets:
+      - database_url
+      - jwt_secret
+      - api_key
+    # RGPD: Pas de volumes en production (code dans l'image)
+    # volumes: []  # Pas de volumes pour sécurité maximale
+    networks:
+      - backend-network
+      - database-network
+    labels:
+      - "compliance.rgpd=by-design"
+      - "compliance.cnil=compliant"
+      - "data.location=EU"
+      - "service.zone=backend"
+      - "service.type=api"
+      - "security.scanning=enabled"
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        labels: "compliance.rgpd,service.zone"
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # ============================================================================
+  # Zone Database - Production PostgreSQL
+  # ============================================================================
+  postgres:
+    image: postgres:18.1-alpine
+    container_name: lexorbital-postgres-prod
+    # Sécurité RGPD: Port NON exposé - Accès uniquement depuis backend
+    # ports: []  # Pas d'exposition directe en production
+    environment:
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_DB=lexorbital
+      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
+    secrets:
+      - postgres_user
+      - postgres_password
+    volumes:
+      # RGPD: Volume chiffré (configurer le chiffrement au niveau du système de fichiers)
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - database-network  # Réseau isolé - Accès uniquement depuis backend
+    labels:
+      - "compliance.rgpd=by-design"
+      - "compliance.cnil=compliant"
+      - "data.location=EU"
+      - "data.retention=30d"  # Adapter selon vos besoins RGPD
+      - "service.zone=database"
+      - "service.type=database"
+      - "security.scanning=enabled"
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$(cat /run/secrets/postgres_user)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        labels: "compliance.rgpd,service.zone"
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    security_opt:
+      - no-new-privileges:true
+
+  # ============================================================================
+  # Reverse Proxy - Traefik ou Nginx (optionnel, à configurer séparément)
+  # ============================================================================
+  # reverse-proxy:
+  #   image: traefik:v3.0
+  #   container_name: lexorbital-reverse-proxy
+  #   command:
+  #     - "--api.insecure=true"
+  #     - "--providers.docker=true"
+  #     - "--entrypoints.web.address=:80"
+  #     - "--entrypoints.websecure.address=:443"
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  #   networks:
+  #     - frontend-network
+  #   labels:
+  #     - "compliance.rgpd=by-design"
+  #     - "service.zone=frontend"
+  #   restart: always
+
+# ============================================================================
+# Réseaux isolés par zone (RGPD: Isolation totale)
+# ============================================================================
+networks:
+  # Réseau frontend - Accès contrôlé
+  frontend-network:
+    driver: bridge
+    name: lexorbital-frontend-prod
+    # En production, considérer: internal: false avec firewall
+
+  # Réseau backend - Communication interne uniquement
+  backend-network:
+    driver: bridge
+    name: lexorbital-backend-prod
+    internal: true  # Pas d'accès Internet direct
+
+  # Réseau database - Isolation maximale
+  database-network:
+    driver: bridge
+    name: lexorbital-database-prod
+    internal: true  # Accès uniquement depuis backend
+
+# ============================================================================
+# Volumes persistants (RGPD: Chiffrement obligatoire)
+# ============================================================================
+volumes:
+  postgres-data:
+    name: lexorbital-postgres-data-prod
+    # RGPD: Configurer le chiffrement au niveau du système de fichiers
+    # Exemple avec bind mount chiffré:
+    # driver_opts:
+    #   type: none
+    #   o: bind
+    #   device: /secure/encrypted/path/to/data
+    #   # Le répertoire doit être monté avec encryption (LUKS, etc.)
+
+# ============================================================================
+# Secrets Docker (RGPD: Gestion sécurisée des credentials)
+# ============================================================================
+# ⚠️ Créer les secrets AVANT de démarrer les services:
+#
+# echo "lexorbital" | docker secret create postgres_user -
+# echo "VOTRE_MOT_DE_PASSE_SECURISE" | docker secret create postgres_password -
+# echo "postgresql://lexorbital:VOTRE_MOT_DE_PASSE_SECURISE@postgres:5432/lexorbital" | docker secret create database_url -
+# echo "VOTRE_JWT_SECRET_TRES_SECURISE" | docker secret create jwt_secret -
+# echo "VOTRE_API_KEY" | docker secret create api_key -
+#
+# Note: Docker secrets nécessitent Docker Swarm mode:
+# docker swarm init
+# ============================================================================
+secrets:
+  postgres_user:
+    external: true
+  postgres_password:
+    external: true
+  database_url:
+    external: true
+  jwt_secret:
+    external: true
+  api_key:
+    external: true
+
