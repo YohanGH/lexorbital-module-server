@@ -1,0 +1,11 @@
+# Certificats SSL (ne jamais versionner)
+ssl/
+*.pem
+*.key
+*.crt
+*.cert
+
+# Configurations de production (contiennent des secrets)
+reverse-proxy.conf
+!reverse-proxy.conf.example
+
