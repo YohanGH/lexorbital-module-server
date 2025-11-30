@@ -1,0 +1,51 @@
+{
+  "$schema": "../lexorbital-template-module/schemas/module-manifest.v2.schema.json",
+  "name": "lexorbital-module-server",
+  "version": "0.1.0",
+  "type": "infra",
+  "description": "Server infrastructure module for the LexOrbital ecosystem, including Ansible provisioning, deployment scripts, reverse-proxy configurations and security procedures.",
+  "maintainer": {
+    "name": "YohanGH",
+    "contact": "https://github.com/YohanGH"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YohanGH/lexorbital-module-server"
+  },
+  "license": "MIT",
+  "tooling": {
+    "pre-commit": true,
+    "ansible": true,
+    "lint": {
+      "shellcheck": true,
+      "shfmt": true,
+      "ansible-lint": true,
+      "yamllint": true
+    }
+  },
+  "dependencies": {
+    "system": {
+      "ansible": ">=2.14",
+      "bash": ">=4.0",
+      "docker": ">=20.10",
+      "docker-compose": ">=2.0"
+    }
+  },
+  "structure": {
+    "ansible": "Playbooks and Ansible roles for provisioning",
+    "backup": "Backup and restore scripts",
+    "deploy": "Deployment scripts (Compose, Swarm)",
+    "provisionning": "Initial provisioning scripts",
+    "reverse-proxy": "Nginx and Caddy configurations",
+    "scripts": "Audit and maintenance utilities",
+    "systemd": "Systemd services"
+  },
+  "compliance": {
+    "gdpr": true,
+    "security": ["OWASP", "ANSSI"]
+  },
+  "documentation": {
+    "readme": "https://github.com/YohanGH/lexorbital-module-server#readme"
+  }
+}
+

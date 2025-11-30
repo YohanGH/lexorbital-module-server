@@ -1,0 +1,35 @@
+# Configuration yamllint for LexOrbital
+# Compatible with Ansible conventions
+
+extends: default
+
+rules:
+  # Line length more permissive for Ansible
+  line-length:
+    max: 120
+    level: warning
+
+  # Indentation : 2 spaces
+  indentation:
+    spaces: 2
+    indent-sequences: consistent
+
+  # Comments : allow without space after #
+  comments:
+    min-spaces-from-content: 1
+
+  # Double keys forbidden
+  key-duplicates: enable
+
+  # Trailing spaces forbidden
+  trailing-spaces: enable
+
+  # Empty documents allowed (for empty vars/main.yml)
+  document-start:
+    present: false
+
+  # Truthy values : allow yes/no/on/off (Ansible convention)
+  truthy:
+    allowed-values: ['true', 'false', 'yes', 'no', 'on', 'off']
+    check-keys: false
+

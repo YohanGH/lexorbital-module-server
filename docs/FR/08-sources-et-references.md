@@ -36,6 +36,33 @@ Ce document liste toutes les sources consultées et références utilisées pour
   - Guide de déploiement : https://docs.docker.com/engine/swarm/swarm-mode/
   - Utilisé pour l'orchestration en production avec haute disponibilité
 
+### Provisionnement et automatisation
+
+- **Ansible**
+  - Documentation officielle : https://docs.ansible.com/
+  - Getting Started Guide : https://docs.ansible.com/ansible/latest/getting_started/
+  - Best Practices : https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html
+  - Ansible Galaxy : https://galaxy.ansible.com/
+  - Utilisé pour le provisionnement automatisé et idempotent des serveurs
+  - Rôle `base` fourni pour la configuration système minimale
+
+- **ansible-lint**
+  - Documentation officielle : https://ansible-lint.readthedocs.io/
+  - Règles : https://ansible-lint.readthedocs.io/rules/
+  - Utilisé pour valider la qualité des playbooks et rôles Ansible
+  - Intégré dans pre-commit
+
+- **yamllint**
+  - Documentation officielle : https://yamllint.readthedocs.io/
+  - Configuration : https://yamllint.readthedocs.io/en/stable/configuration.html
+  - Utilisé pour valider la syntaxe et le style YAML
+  - Configuration personnalisée pour Ansible (`.yamllint.yaml`)
+
+- **Molecule**
+  - Documentation officielle : https://molecule.readthedocs.io/
+  - Guide de démarrage : https://molecule.readthedocs.io/en/latest/getting-started.html
+  - Framework de test pour rôles Ansible (prévu dans la roadmap)
+
 ### Reverse Proxy
 
 - **Nginx**
@@ -215,6 +242,25 @@ Ce document liste toutes les sources consultées et références utilisées pour
   - Guide de référence : https://www.gnu.org/software/bash/manual/bash.html
   - Utilisé pour les scripts d'administration et d'audit
 
+- **ShellCheck**
+  - Documentation officielle : https://www.shellcheck.net/
+  - Wiki : https://github.com/koalaman/shellcheck/wiki
+  - Galerie d'erreurs : https://github.com/koalaman/shellcheck/wiki/Checks
+  - Utilisé pour valider la qualité des scripts Bash
+  - Intégré dans pre-commit
+
+- **shfmt**
+  - Documentation : https://github.com/mvdan/sh
+  - Releases : https://github.com/mvdan/sh/releases
+  - Utilisé pour formater automatiquement les scripts Bash
+  - Intégré dans pre-commit
+
+- **pre-commit**
+  - Documentation officielle : https://pre-commit.com/
+  - Hooks disponibles : https://pre-commit.com/hooks.html
+  - Utilisé comme framework de hooks Git pour modules infra
+  - Remplace Husky pour les modules d'infrastructure
+
 ### Monitoring et maintenance
 
 - **htop**
@@ -296,12 +342,18 @@ Ce document liste toutes les sources consultées et références utilisées pour
   - Services non-root
   - Séparation frontend/backend/database
 
+- **Idempotence**
+  - Playbooks Ansible exécutables plusieurs fois sans effet de bord
+  - Configuration déclarative plutôt qu'impérative
+  - État désiré vs. commandes séquentielles
+
 ### Concepts clés
 
-- **Infrastructure as Code**
-  - Configuration reproductible
-  - Scripts d'automatisation
-  - Documentation complète
+- **Infrastructure as Code (IaC)**
+  - Configuration reproductible avec Ansible
+  - Playbooks versionnés et testables
+  - Documentation complète et intégrée
+  - Provisionnement automatisé
 
 - **Défense en profondeur**
   - Plusieurs couches de sécurité
@@ -314,5 +366,17 @@ Ce document liste toutes les sources consultées et références utilisées pour
 
 Cette liste est non exhaustive et sera mise à jour au fur et à mesure du développement du projet. Les sources mentionnées ont servi de références pour la conception, l'implémentation et la documentation du module serveur LexOrbital.
 
-**Dernière mise à jour :** 2025-11-29
+**Dernière mise à jour :** 2025-11-30
+
+---
+
+## Ressources LexOrbital
+
+### Documentation du module
+
+- **Documentation Ansible** : `ansible/README.md`
+- **Guide de démarrage rapide Ansible** : `ansible/QUICKSTART.md`
+- **Roadmap Ansible** : `ansible/ROADMAP.md`
+- **Guide pre-commit** : `docs/FR/pre-commit-setup.md`
+- **Guide d'installation** : `docs/FR/01-installation-et-configuration.md`
 

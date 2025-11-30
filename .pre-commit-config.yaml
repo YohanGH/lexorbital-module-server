@@ -1,0 +1,65 @@
+# Configuration pre-commit for LexOrbital infrastructure module
+# 
+# Installation (recommended method with pipx to avoid PEP 668) :
+#   sudo apt install pipx
+#   pipx ensurepath
+#   pipx install pre-commit
+#   pre-commit install
+#
+# Alternative with venv :
+#   python3 -m venv ~/.venv/pre-commit
+#   source ~/.venv/pre-commit/bin/activate
+#   pip install pre-commit
+#   pre-commit install
+#
+# Manual execution :
+#   pre-commit run --all-files
+
+repos:
+  # General hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: ['--unsafe']  # Necessary for Ansible templates with Jinja2
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: mixed-line-ending
+
+  # Shellcheck - Linter for Bash scripts
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.9.0.6
+    hooks:
+      - id: shellcheck
+        args: ['--severity=warning']
+
+  # shfmt - Formatter for Bash scripts
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.7.0-4
+    hooks:
+      - id: shfmt
+        args: ['-i', '2', '-ci', '-w']  # Indentation 2 spaces, case indent
+
+  # ansible-lint - Linter for playbooks and Ansible roles
+  - repo: https://github.com/ansible/ansible-lint
+    rev: v6.22.1
+    hooks:
+      - id: ansible-lint
+        files: \.(yaml|yml)$
+        entry: ansible-lint
+        pass_filenames: false
+        always_run: true
+        args:
+          - '--offline'
+          - 'ansible/'
+
+  # yamllint - Linter for YAML files
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.33.0
+    hooks:
+      - id: yamllint
+        args: ['-c', '.yamllint.yaml']
+

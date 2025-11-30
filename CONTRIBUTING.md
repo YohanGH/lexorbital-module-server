@@ -60,11 +60,13 @@ A proposal issue is required prior to development.
 
 ### Commit messages — Conventional Commits
 
+**Note** : Ce module est un **module d'infrastructure**. Les conventions de commit sont gérées par **pre-commit** (et non Husky/commitlint qui sont réservés aux modules applicatifs).
+
 Examples:
 
-- feat(audit): add anonymization TTL
-- fix(core): prevent crash when config is missing
-- docs(back-ring): update OpenAPI contract
+- feat(ansible): add docker provisioning role
+- fix(backup): prevent backup failure when directory is empty
+- docs(security): update SSH hardening guide
 
 ### Branch naming
 
@@ -127,19 +129,36 @@ and **must not be reported publicly**.
 
 ## 7. Local Development
 
-### For a module:
+### For this infrastructure module:
 
-- pnpm install
-- pnpm run dev
-- pnpm test
-- docker build .
+This is an **infrastructure module** (Bash + Ansible), not an applicative module.
 
-Modules must run **in isolation**.
+**Setup**:
+```bash
+# Install Ansible
+sudo apt install ansible  # Debian/Ubuntu
+# or
+brew install ansible      # macOS
+
+# Install linting tools (recommended)
+pip install ansible-lint yamllint
+sudo apt install shellcheck shfmt  # or brew install
+```
+
+**Testing Ansible playbooks**:
+```bash
+cd ansible
+ansible-playbook playbooks/site.yml --check  # Dry-run
+ansible-playbook playbooks/site.yml --limit staging  # Test on staging
+```
+
+**Testing shell scripts**:
+```bash
+shellcheck scripts/*.sh
+shfmt -d scripts/*.sh
+```
 
 ### For lexorbital-core:
-
-- pnpm install
-- pnpm run dev
 
 Modules appear under `/modules` via subtree.
 
