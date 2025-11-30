@@ -1,0 +1,11 @@
+---
+# Base role variables
+# 
+# This file will contain specific variables for minimal system provisioning.
+# For now, it is empty but will be used in future evolutions.
+#
+# Examples of variables to add later:
+# - Custom list of packages
+# - Ports to open in the firewall
+# - Configuration system specific
+

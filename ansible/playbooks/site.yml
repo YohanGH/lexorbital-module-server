@@ -1,0 +1,16 @@
+---
+# Main LexOrbital playbook
+# Minimal server production provisioning
+
+- name: LexOrbital - Minimal server provisioning
+  hosts: servers
+  become: yes
+  
+  roles:
+    - base
+
+  # To add other roles later, uncomment and adapt:
+  # - docker
+  # - reverse-proxy
+  # - security-hardening
+

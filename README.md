@@ -2,8 +2,13 @@
 
 Production-ready server infrastructure module for LexOrbital with security and GDPR compliance built-in.
 
-## 🎯 Features
+## 🎯 Type de module
 
+**Module d'infrastructure** - Stack : Bash + Ansible + pre-commit
+
+## 🛠️ Features
+
+- **Provisionnement Ansible** automatisé et idempotent
 - **Production-ready** Docker Compose and Swarm configurations
 - **Security hardening** with best practices (OWASP, ANSSI)
 - **GDPR-compliant** logging and data handling
@@ -18,9 +23,22 @@ Production-ready server infrastructure module for LexOrbital with security and G
 
 ## 🚀 Quick Start
 
+### Prérequis
+
+- Ansible >= 2.14
+- SSH access to target server(s)
+- Python 3 on target server(s)
+
+### Installation et provisionnement
+
 1. **Server preparation**: Follow `docs/FR/00-serveur-prerequis.md`
-2. **Installation**: Follow `docs/FR/01-installation-et-configuration.md`
-3. **Deployment**: Follow `docs/FR/02-guide-de-deploiement.md`
+2. **Installation and Ansible setup**: Follow `docs/FR/01-installation-et-configuration.md`
+3. **Run Ansible provisioning**:
+   ```bash
+   cd ansible
+   ansible-playbook playbooks/site.yml
+   ```
+4. **Deployment**: Follow `docs/FR/02-guide-de-deploiement.md`
 
 ## 🔒 Security
 

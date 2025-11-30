@@ -1,0 +1,56 @@
+---
+# Base role : Minimal system provisioning
+# 
+# This role performs base operations on an Ubuntu/Debian server:
+# - System update
+# - Installation of essential packages
+# - Configuration of UFW firewall
+
+- name: Ensure system packages are updated
+  ansible.builtin.apt:
+    update_cache: yes
+    upgrade: dist
+    cache_valid_time: 3600
+  tags:
+    - base
+    - updates
+
+- name: Install essential packages
+  ansible.builtin.apt:
+    name:
+      - vim
+      - curl
+      - git
+      - ufw
+      - htop
+      - net-tools
+      - python3-pip
+    state: present
+  tags:
+    - base
+    - packages
+
+- name: Ensure UFW is enabled
+  ansible.builtin.ufw:
+    state: enabled
+    policy: deny
+  tags:
+    - base
+    - firewall
+
+- name: Allow SSH on port 22
+  ansible.builtin.ufw:
+    rule: allow
+    port: "22"
+    proto: tcp
+  tags:
+    - base
+    - firewall
+
+- name: Set timezone to UTC
+  community.general.timezone:
+    name: UTC
+  tags:
+    - base
+    - system
+

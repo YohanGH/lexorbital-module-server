@@ -15,6 +15,7 @@ Documentation complète pour le déploiement et la maintenance du module serveur
 
 2. **[01 — Installation et configuration](./FR/01-installation-et-configuration.md)**
    - Installation après le clone du dépôt
+   - **Provisionnement automatisé avec Ansible**
    - Configuration des secrets Docker
    - Configuration du reverse proxy Nginx
 
@@ -101,12 +102,14 @@ docs/
 Pour un nouveau déploiement :
 
 1. **00 — Préparation du serveur** (obligatoire)
-2. **01 — Installation et configuration**
+2. **01 — Installation et configuration** (incluant provisionnement Ansible)
 3. **02 — Guide de déploiement**
 4. **03 — Durcissement serveur** (après déploiement)
 5. **04 — Utilisateurs et autorisations** (après déploiement)
 6. **06 — RGPD** (pour la conformité)
 7. **07 — DRP** (pour la résilience)
+
+> **💡 Nouveau :** Ce module inclut désormais une configuration **Ansible** complète pour automatiser le provisionnement initial. Voir la [documentation Ansible](../ansible/README.md).
 
 Pour la maintenance :
 
