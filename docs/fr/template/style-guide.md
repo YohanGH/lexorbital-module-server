@@ -48,7 +48,7 @@ const app = express();
 
 ```markdown
 <!-- Liens internes (relatifs) -->
-[Guide d'installation](./operations/installation.md)
+[Guide d'installation](../operations/installation.md)
 
 <!-- Liens externes -->
 [Documentation Ansible](https://docs.ansible.com/)
@@ -191,7 +191,7 @@ Problèmes courants et solutions.
 ## 📖 Références
 
 - [Lien vers documentation externe](https://example.com)
-- [Autre document lié](./autre-doc.md)
+- [Autre document lié](../operations/installation.md)
 
 ---
 
@@ -340,11 +340,11 @@ Utiliser le script fourni :
 
 ## 📖 Exemples Complets
 
-Voir le dossier `examples/` pour des exemples de documents bien formatés :
+Voir les documents existants pour des exemples de documents bien formatés :
 
-- [Guide d'installation type](../examples/installation-example.md)
-- [Documentation API type](../examples/api-reference-example.md)
-- [Guide de dépannage type](../examples/troubleshooting-example.md)
+- [Installation](../operations/installation.md) - Guide d'installation
+- [Dépannage](../howto/troubleshooting.md) - Guide de dépannage
+- [Référence Scripts](../reference/scripts.md) - Documentation de référence
 
 ---
 

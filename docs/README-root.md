@@ -2,18 +2,17 @@
 
 > **Production-ready server infrastructure module** with integrated security and GDPR compliance for the LexOrbital ecosystem.
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Documentation](https://img.shields.io/badge/docs-bilingual-brightgreen)](./docs)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](../LICENSE)
+[![Documentation](https://img.shields.io/badge/docs-bilingual-brightgreen)](./fr/)
 
 ---
 
 ## 🌍 Language / Langue
 
-**🇫🇷 Version française** (documentation complète)  
+**🇫🇷 Version française** (documentation complète)
 **🇬🇧 English version** (professional showcase)
 
-👉 **[Documentation FR (complète)](./docs/fr/index.md)**  
-👉 **[Documentation EN (showcase)](./docs/en/index.md)**
+👉 **[Documentation FR (complète)](./fr/index.md)**
 
 ---
 
@@ -88,38 +87,27 @@ Ce module fait partie de **Ring 2 / Anneau 2** et fournit l'infrastructure serve
 ✅ **Security standards / Standards sécurité:** OWASP Top 10, ANSSI recommendations  
 ✅ **Audit trail / Piste d'audit:** Complete logging with automatic rotation
 
-**🇬🇧 See:** [GDPR Overview](./docs/en/compliance/gdpr-overview.md)  
-**🇫🇷 Voir:** [Conformité RGPD](./docs/fr/compliance/overview.md)
+**🇫🇷 Voir:** [Conformité RGPD](./fr/compliance/overview.md)
 
 ---
 
 ## 📚 Documentation
 
-### 🇬🇧 English Documentation (Showcase)
-
-**For Recruiters / Decision Makers:**
-- [Project Overview](./docs/en/project/overview.md)
-- [System Architecture](./docs/en/architecture/system-design.md)
-- [GDPR Compliance](./docs/en/compliance/gdpr-overview.md)
-
-**Quick Start:**
-- [Getting Started](./docs/en/operations/quickstart.md)
-
 ### 🇫🇷 Documentation Française (Complète)
 
 **Pour les Décideurs:**
-- [Vue d'ensemble du projet](./docs/fr/project/overview.md)
-- [Architecture système](./docs/fr/architecture/system-design.md)
-- [Conformité RGPD](./docs/fr/compliance/overview.md)
+- [Vue d'ensemble du projet](./fr/project/overview.md)
+- [Architecture système](./fr/architecture/system-design.md)
+- [Conformité RGPD](./fr/compliance/overview.md)
 
 **Pour les DevOps / SysAdmins:**
-- [Prérequis serveur](./docs/fr/operations/prerequisites.md)
-- [Installation & Configuration](./docs/fr/operations/installation.md)
-- [Guide de déploiement](./docs/fr/operations/deployment.md)
+- [Prérequis serveur](./fr/operations/prerequisites.md)
+- [Installation & Configuration](./fr/operations/installation.md)
+- [Guide de déploiement](./fr/operations/deployment.md)
 
 **Pour la Sécurité / Compliance:**
-- [Durcissement sécurité](./docs/fr/security/hardening.md)
-- [Mesures techniques RGPD](./docs/fr/compliance/gdpr-technical.md)
+- [Durcissement sécurité](./fr/security/hardening.md)
+- [Mesures techniques RGPD](./fr/compliance/gdpr-technical.md)
 
 ---
 
@@ -144,19 +132,19 @@ Développé dans le cadre de **l'écosystème LexOrbital** — une architecture 
 
 ## 🤝 Contributing / Contribution
 
-See / Voir [CONTRIBUTING.md](./CONTRIBUTING.md)
+See / Voir [CONTRIBUTING.md](../CONTRIBUTING.md)
 
 ---
 
 ## 📄 License
 
-[MIT](./LICENSE)
+[MIT](../LICENSE)
 
 ---
 
 ## 📜 Code of Conduct / Code de Conduite
 
-See / Voir [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)
+See / Voir [CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md)
 
 ---
 
@@ -177,6 +165,6 @@ Ce repository utilise `example.com` pour les domaines et `XXXXX` pour les ports 
 
 **Made with 🌍 by the LexOrbital community**
 
-[🇫🇷 Docs FR](./docs/fr/) • [🇬🇧 Docs EN](./docs/en/) • [Contributing](./CONTRIBUTING.md) • [Issues](https://github.com/YohanGH/lexorbital-module-server/issues)
+[🇫🇷 Docs FR](./fr/) • [Contributing](../CONTRIBUTING.md) • [Issues](https://github.com/YohanGH/lexorbital-module-server/issues)
 
 </div>
