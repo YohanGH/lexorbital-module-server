@@ -60,7 +60,7 @@ A proposal issue is required prior to development.
 
 ### Commit messages — Conventional Commits
 
-**Note** : Ce module est un **module d'infrastructure**. Les conventions de commit sont gérées par **pre-commit** (et non Husky/commitlint qui sont réservés aux modules applicatifs).
+**Note** : this module is an **infrastructure module**. The commit conventions are managed by **pre-commit** (and not Husky/commitlint which are reserved for applicative modules).
 
 Examples:
 

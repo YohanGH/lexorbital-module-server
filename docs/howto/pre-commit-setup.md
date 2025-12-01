@@ -1,4 +1,6 @@
-# Configuration pre-commit pour module d'infrastructure
+# Configuration pre-commit pour Module d'Infrastructure
+
+> **Configuration et utilisation de pre-commit** pour les modules d'infrastructure LexOrbital.
 
 Ce document explique comment configurer et utiliser **pre-commit** pour ce module d'infrastructure LexOrbital.
 
@@ -9,11 +11,13 @@ Ce document explique comment configurer et utiliser **pre-commit** pour ce modul
 Dans l'écosystème LexOrbital, il existe deux familles de modules :
 
 ### Modules applicatifs (TypeScript/Node)
+
 - Utilisent **Husky** pour les hooks Git
 - Utilisent **commitlint** pour valider les messages de commit
 - Stack : Node.js / TypeScript / ESLint / Prettier
 
 ### Modules d'infrastructure (Bash/Ansible) ← Ce module
+
 - Utilisent **pre-commit** pour les hooks Git
 - Linting : **shellcheck**, **shfmt**, **ansible-lint**, **yamllint**
 - Stack : Bash / Ansible / shell scripts
@@ -46,6 +50,7 @@ pipx install pre-commit
 #### Alternative : Environnement virtuel
 
 Si vous préférez un environnement virtuel explicite :
+
 ```bash
 # Créer un environnement virtuel dédié
 python3 -m venv ~/.venv/pre-commit
@@ -75,6 +80,7 @@ brew install pre-commit
 ```
 
 ### Vérification
+
 ```bash
 pre-commit --version
 # Exemple de sortie : pre-commit 3.5.0
@@ -169,6 +175,7 @@ shfmt..................................................................Failed
 ```
 
 **Solution :** Les fichiers ont été reformatés automatiquement. Ajoutez-les et re-commitez :
+
 ```bash
 git add .
 git commit -m "fix: update backup script"
@@ -226,5 +233,13 @@ pre-commit uninstall
 
 ---
 
-**Date de dernière mise à jour :** 2025-11-30
+## Voir aussi
+
+- [Installation & Configuration](../operations/installation.md)
+- [Provisionnement Ansible](../operations/ansible-provisioning.md)
+- [Guide de style](../template/style-guide.md)
+
+---
+
+**Dernière mise à jour :** 2025-12-01
 

@@ -1,4 +1,6 @@
-# 02 — Guide de déploiement LexOrbital
+# Guide de Déploiement
+
+> **Stratégies de déploiement** pour LexOrbital Module Server en production.
 
 Ce document décrit les différentes stratégies de déploiement de LexOrbital.
 
@@ -109,3 +111,66 @@ docker stack deploy -c docker/docker-compose.prod.yml.backup myapp-stack
 - [ ] Certificats SSL valides
 - [ ] Monitoring actif
 - [ ] Plan de rollback préparé
+
+---
+
+## 5. Scripts de déploiement automatisé
+
+Le module fournit des scripts de déploiement dans le répertoire `deploy/` :
+
+### Déploiement Compose
+
+```bash
+./deploy/deploy-compose-prod.sh
+```
+
+### Déploiement Swarm
+
+```bash
+./deploy/deploy-swarm.sh
+```
+
+Ces scripts automatisent :
+- Vérification des prérequis
+- Pull des dernières images
+- Redéploiement des services
+- Vérification de santé des services
+
+---
+
+## 6. Configuration Webhook pour déploiement automatique
+
+Pour configurer un webhook GitHub/GitLab pour déploiement automatique, voir [Configuration Webhook](../howto/configure-webhook.md).
+
+---
+
+## 7. Monitoring post-déploiement
+
+Après le déploiement, vérifier :
+
+```bash
+# État des containers
+docker ps
+
+# Logs des services
+docker compose logs -f
+
+# Santé des services
+curl https://example.com/health
+curl https://api.example.com/health
+
+# Métriques système
+docker stats
+```
+
+---
+
+## Voir aussi
+
+- [Installation & Configuration](./installation.md)
+- [Backup & Recovery](./backup-recovery.md)
+- [Configuration Reverse Proxy](./reverse-proxy.md)
+
+---
+
+**Dernière mise à jour :** 2025-12-01

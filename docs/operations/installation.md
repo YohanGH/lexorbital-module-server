@@ -1,6 +1,8 @@
-# 01 — Installation et configuration (après clone)
+# Installation et Configuration
 
-Ce document décrit l'installation de LexOrbital après avoir préparé le serveur selon le document `00-serveur-prerequis.md`.
+> **Installation de LexOrbital Module Server** après préparation du serveur selon les prérequis.
+
+Ce document décrit l'installation de LexOrbital après avoir préparé le serveur selon le document [Prérequis Serveur](./prerequisites.md).
 
 > **⚠️ Document PUBLIC-SAFE :** Les domaines et URLs utilisent `example.com` comme exemple. Remplacez par vos valeurs réelles.
 
@@ -28,27 +30,6 @@ Ce module inclut une configuration Ansible pour automatiser le provisionnement d
 ```bash
 sudo apt update
 sudo apt install ansible
-```
-
-# pre-commit (méthode recommandée avec pipx)
-
-[Voir la documentation de pre-commit](pre-commit-setup.md)
-
-> **Alternative avec venv** (si vous préférez un environnement virtuel) :
-> ```bash
-> python3 -m venv ~/.venv/pre-commit
-> source ~/.venv/pre-commit/bin/activate
-> pip install pre-commit
-> pre-commit install
-> ```
-
-# Linters (optionnel mais recommandé)
-```bash
-# Pour ansible-lint et yamllint, utilisez également pipx ou un venv
-pipx install ansible-lint yamllint
-
-# shellcheck est disponible via apt
-sudo apt install shellcheck
 ```
 
 ### 2.2. Configuration de l'inventaire
@@ -127,6 +108,8 @@ which vim git curl htop
 > ansible-playbook playbooks/site.yml --check
 > ```
 
+Pour plus de détails sur le provisionnement Ansible, voir [Provisionnement Ansible](./ansible-provisioning.md).
+
 ---
 
 ## 3. Configuration des secrets Docker (si utilisation de Swarm)
@@ -170,6 +153,8 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
+Pour plus de détails sur la configuration du reverse proxy, voir [Configuration Reverse Proxy](./reverse-proxy.md).
+
 ---
 
 ## 5. Déploiement initial
@@ -186,6 +171,8 @@ docker compose -f docker/docker-compose.prod.yml up -d
 docker stack deploy -c docker/docker-compose.prod.yml myapp-stack
 ```
 
+Pour plus de détails sur les stratégies de déploiement, voir [Guide de Déploiement](./deployment.md).
+
 ---
 
 ## 6. Vérification du déploiement
@@ -201,3 +188,18 @@ docker compose logs -f
 curl https://example.com/health
 curl https://api.example.com/health
 ```
+
+---
+
+## Prochaines Étapes
+
+Après l'installation de base :
+
+1. **Durcissement sécurité** → [Durcissement Sécurité](../security/hardening.md)
+2. **Audit des permissions** → [Audit Permissions](../security/permissions-audit.md)
+3. **Configuration webhook** → [Configuration Webhook](../howto/configure-webhook.md)
+4. **Plan de reprise** → [Backup & Recovery](./backup-recovery.md)
+
+---
+
+**Dernière mise à jour :** 2025-12-01

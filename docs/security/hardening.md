@@ -1,8 +1,10 @@
-# 03 — Durcissement serveur (Security Hardening)
+# Durcissement Serveur (Security Hardening)
+
+> **Mesures avancées de renforcement de la sécurité** à appliquer après le déploiement initial.
 
 Ce document décrit les **mesures avancées de renforcement de la sécurité** à appliquer après le déploiement initial.
 
-> **⚠️ Prérequis :** Avoir complété `00-serveur-prerequis.md` (SSH de base, UFW minimal, utilisateur créé).
+> **⚠️ Prérequis :** Avoir complété [Prérequis Serveur](../operations/prerequisites.md) (SSH de base, UFW minimal, utilisateur créé).
 > 
 > **⚠️ Document PUBLIC-SAFE :** Adaptez selon votre contexte de sécurité.
 
@@ -21,7 +23,7 @@ sudo nano /etc/ssh/sshd_config
 Paramètres avancés à ajouter :
 
 ```
-# Sécurité de base (déjà fait dans 00-serveur-prerequis.md)
+# Sécurité de base (déjà fait dans prérequis)
 PermitRootLogin no
 PasswordAuthentication no
 PubkeyAuthentication yes
@@ -124,7 +126,7 @@ sudo fail2ban-client status sshd
 
 ### Vérifier la configuration de base
 
-La configuration minimale a été faite dans `00-serveur-prerequis.md`. Vérifier :
+La configuration minimale a été faite dans les prérequis. Vérifier :
 
 ```bash
 sudo ufw status verbose
@@ -224,7 +226,7 @@ Unattended-Upgrade::Automatic-Reboot "false";  # Mettre à true si souhaité
 
 ### Vérifier la configuration journald de base
 
-La configuration minimale a été faite dans `00-serveur-prerequis.md`. Vérifier :
+La configuration minimale a été faite dans les prérequis. Vérifier :
 
 ```bash
 sudo cat /etc/systemd/journald.conf | grep -E "SystemMaxUse|MaxRetentionSec"
@@ -368,7 +370,20 @@ Configurer des alertes pour :
 
 ## 6. Sauvegardes et tests de restauration
 
-Voir le document `07-drp.md` pour :
+Voir le document [Backup & Recovery](../operations/backup-recovery.md) pour :
 - Stratégie de sauvegarde
 - Tests de restauration
 - Plan de reprise après sinistre (DRP)
+
+---
+
+## Voir aussi
+
+- [Prérequis Serveur](../operations/prerequisites.md)
+- [Audit Permissions](./permissions-audit.md)
+- [Mesures Techniques RGPD](../compliance/gdpr-technical.md)
+
+---
+
+**Dernière mise à jour :** 2025-12-01
+
