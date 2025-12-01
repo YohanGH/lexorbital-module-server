@@ -1,10 +1,12 @@
-# Scripts utilitaires LexOrbital
+# Scripts Utilitaires
+
+> **Scripts utilitaires** pour la maintenance et l'audit de LexOrbital Module Server.
 
 Ce dossier contient les scripts utilitaires pour la maintenance et l'audit de LexOrbital.
 
 ---
 
-## 📋 Scripts disponibles
+## 📋 Scripts Disponibles
 
 ### `audit-permissions.sh`
 
@@ -55,6 +57,8 @@ sudo crontab -u lexorbital -e
 # Audit hebdomadaire (dimanche 3h du matin)
 0 3 * * 0 /usr/local/bin/lexorbital-audit-permissions.sh
 ```
+
+Pour plus de détails, voir [Audit Permissions](../security/permissions-audit.md).
 
 ---
 
@@ -167,18 +171,20 @@ sudo crontab -e
 
 ---
 
-## 📚 Documentation
+## 📚 Documentation Complémentaire
 
 Pour plus de détails sur l'utilisation et la configuration, voir :
 
-- `docs/FR/04-utilisateurs-et-autorisations.md` - Gestion des permissions
-- `docs/FR/03-renforcement-de-la-securite.md` - Durcissement serveur
+- [Audit Permissions](../security/permissions-audit.md) - Gestion des permissions
+- [Durcissement Sécurité](../security/hardening.md) - Durcissement serveur
+- [Prérequis Serveur](../operations/prerequisites.md) - Configuration initiale
 
 ---
 
 ## 🔒 Sécurité
 
 Tous les scripts doivent être :
+
 - Exécutables uniquement par l'utilisateur `lexorbital` ou `root`
 - Permissions : `750` (rwxr-x---)
 - Ownership : `lexorbital:lexorbital`
@@ -189,3 +195,36 @@ Vérifier les permissions :
 ls -la scripts/
 ```
 
+---
+
+## 📝 Structure des Scripts
+
+```
+scripts/
+├── audit-permissions.sh      # Audit des permissions
+├── configure-server.sh        # Configuration serveur
+└── update-server.sh          # Mise à jour serveur
+```
+
+---
+
+## 🛠️ Développement
+
+### Ajouter un Nouveau Script
+
+1. Créer le script dans `scripts/`
+2. Ajouter la documentation dans ce fichier
+3. Tester sur environnement de développement
+4. Mettre à jour la documentation
+
+### Conventions
+
+- **Shebang** : `#!/bin/bash`
+- **Mode strict** : `set -euo pipefail`
+- **Logging** : Utiliser `/var/log/lexorbital/`
+- **Codes de sortie** : `0` = succès, `1` = erreur
+- **Messages** : Utiliser des codes couleur (✅/⚠️)
+
+---
+
+**Dernière mise à jour :** 2025-12-01

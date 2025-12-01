@@ -1,8 +1,10 @@
-# 04 — Utilisateurs système et autorisations détaillées
+# Utilisateurs Système et Autorisations Détaillées
+
+> **Gestion avancée des permissions** et audit de sécurité pour LexOrbital.
 
 Ce document décrit la **gestion avancée des permissions** et l'audit de sécurité pour LexOrbital.
 
-> **⚠️ Prérequis :** L'utilisateur système `lexorbital` a été créé dans `00-serveur-prerequis.md`.
+> **⚠️ Prérequis :** L'utilisateur système `lexorbital` a été créé dans [Prérequis Serveur](../operations/prerequisites.md).
 > 
 > **⚠️ Principe de sécurité :** Principe de moindre privilège strictement appliqué.
 
@@ -33,7 +35,7 @@ getent passwd lexorbital
 groups lexorbital
 ```
 
-Si l'utilisateur n'existe pas, le créer selon `00-serveur-prerequis.md`.
+Si l'utilisateur n'existe pas, le créer selon [Prérequis Serveur](../operations/prerequisites.md).
 
 ---
 
@@ -219,6 +221,8 @@ Le script vérifie automatiquement :
 
 Les résultats sont enregistrés dans `/var/log/lexorbital/audit.log`.
 
+Pour plus de détails sur les scripts d'audit, voir [Référence Scripts](../reference/scripts.md).
+
 ### Commandes d'audit manuel
 
 #### Vérifier les fichiers avec permissions trop larges
@@ -342,3 +346,15 @@ sudo find /srv/lexorbital -type d -perm /o+w -exec chmod o-w {} \;
 sudo chmod 600 /srv/lexorbital/.env
 sudo chmod 640 /var/log/lexorbital/*.log
 ```
+
+---
+
+## Voir aussi
+
+- [Prérequis Serveur](../operations/prerequisites.md)
+- [Durcissement Sécurité](./hardening.md)
+- [Référence Scripts](../reference/scripts.md)
+
+---
+
+**Dernière mise à jour :** 2025-12-01
