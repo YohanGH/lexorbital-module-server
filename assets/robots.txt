@@ -1,0 +1,63 @@
+# ============================================================================
+# robots.txt - LexOrbital
+# ============================================================================
+# This file tells search engines which parts of the site they can crawl.
+# 
+# For production, customize this file based on your needs:
+# - Allow crawling of public pages
+# - Disallow crawling of private/admin areas
+# - Specify sitemap location
+# ============================================================================
+
+# Allow all search engines to crawl the site
+User-agent: *
+Allow: /
+
+# Disallow crawling of private/admin areas
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /.well-known/
+Disallow: /health
+
+# Disallow crawling of error pages (no SEO value)
+Disallow: /5xx.html
+Disallow: /5xx-en.html
+Disallow: /4xx.html
+Disallow: /4xx-en.html
+
+# Allow crawling of assets (images, CSS, JS for SEO)
+Allow: /assets/
+
+# Sitemap location (uncomment and update with your actual sitemap URL)
+# Sitemap: https://example.com/sitemap.xml
+
+# ============================================================================
+# Crawl-delay (optional, uncomment if needed)
+# ============================================================================
+# Some search engines respect crawl-delay to avoid overloading the server
+# Crawl-delay: 1
+
+# ============================================================================
+# Specific rules for major search engines (optional)
+# ============================================================================
+
+# Google
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# ============================================================================
+# Notes:
+# - This is a template file. Customize for your specific needs.
+# - For GDPR compliance, ensure no personal data is exposed in crawlable pages.
+# - Regularly review and update this file as your site structure evolves.
+# ============================================================================
+
