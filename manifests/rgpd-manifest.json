@@ -1,0 +1,263 @@
+{
+  "$schema": "../schemas/rgpd-manifest.schema.json",
+  "name": "lexorbital-module-server",
+  "version": "1.0.0",
+  "description": "Server infrastructure module GDPR/RGPD compliance manifest",
+  "lastUpdated": "2025-12-01",
+  "data": [
+    {
+      "name": "nginx_access_logs",
+      "category": "technical_logs",
+      "purpose": "security_monitoring_and_troubleshooting",
+      "description": "Nginx access logs with pseudonymized IP addresses for security monitoring and troubleshooting",
+      "legal_basis": "legitimate_interest",
+      "legal_basis_details": "Article 6(1)(f) GDPR - Legitimate interest for security and system operations",
+      "retention": "6 months",
+      "retention_details": {
+        "active_period": "6 months",
+        "archival_period": "none",
+        "deletion_method": "logrotate_automatic"
+      },
+      "contains_personal_data": "yes",
+      "personal_data_fields": [
+        {
+          "field": "ip_address_pseudonymized",
+          "type": "pseudonymized",
+          "description": "IP address with last octet removed (e.g., 192.168.1.0)",
+          "collection_method": "nginx_map"
+        }
+      ],
+      "data_subjects": ["all_visitors"],
+      "processing_activities": [
+        "logging_http_requests",
+        "security_monitoring",
+        "troubleshooting",
+        "ddos_detection"
+      ],
+      "security_measures": [
+        "pseudonymization_last_octet_removal",
+        "access_control_root_only",
+        "encryption_at_rest",
+        "automatic_rotation_and_deletion",
+        "server_tokens_off"
+      ],
+      "data_minimization": {
+        "applied": true,
+        "measures": [
+          "IP addresses pseudonymized (last octet removed)",
+          "No user-agent strings in RGPD log format",
+          "No cookies logged",
+          "No query parameters logged",
+          "Minimal log format: IP, timestamp, request, status, bytes"
+        ]
+      },
+      "third_party_sharing": "none",
+      "cross_border_transfer": "none",
+      "user_rights": {
+        "access": {
+          "available": false,
+          "reason": "Pseudonymized technical logs, not subject to individual access"
+        },
+        "rectification": {
+          "available": false,
+          "reason": "Immutable logs"
+        },
+        "erasure": {
+          "available": false,
+          "reason": "Required for security, automatically deleted after 6 months"
+        },
+        "portability": {
+          "available": false,
+          "reason": "Not applicable to technical logs"
+        }
+      },
+      "dpia_required": false,
+      "dpia_reason": "Low risk - pseudonymized technical logs",
+      "automated_decision_making": "none",
+      "cnil_compliance_notes": [
+        "IP pseudonymization applied (CNIL recommendation)",
+        "6-month retention (within CNIL guidelines of 6-12 months)",
+        "server_tokens off (no version disclosure)"
+      ]
+    },
+    {
+      "name": "nginx_error_logs",
+      "category": "security_logs",
+      "purpose": "incident_detection_and_troubleshooting",
+      "description": "Nginx error logs for detecting and resolving server issues",
+      "legal_basis": "legitimate_interest",
+      "legal_basis_details": "Article 6(1)(f) GDPR - Legitimate interest for system reliability and security",
+      "retention": "6 months",
+      "retention_details": {
+        "active_period": "6 months",
+        "archival_period": "none",
+        "deletion_method": "logrotate_automatic"
+      },
+      "contains_personal_data": "minimal",
+      "personal_data_fields": [],
+      "data_subjects": ["all_visitors"],
+      "processing_activities": [
+        "error_logging",
+        "incident_detection",
+        "troubleshooting"
+      ],
+      "security_measures": [
+        "access_control_root_only",
+        "no_sensitive_data_logged",
+        "encryption_at_rest",
+        "automatic_rotation_and_deletion"
+      ],
+      "data_minimization": {
+        "applied": true,
+        "measures": [
+          "Only error messages and timestamps logged",
+          "No request bodies or sensitive data",
+          "No user identifiers"
+        ]
+      },
+      "third_party_sharing": "none",
+      "cross_border_transfer": "none",
+      "user_rights": {
+        "access": {
+          "available": false,
+          "reason": "Technical logs without personal identifiers"
+        },
+        "rectification": {
+          "available": false,
+          "reason": "Immutable logs"
+        },
+        "erasure": {
+          "available": false,
+          "reason": "Required for security, automatically deleted after 6 months"
+        },
+        "portability": {
+          "available": false,
+          "reason": "Not applicable to technical logs"
+        }
+      },
+      "dpia_required": false,
+      "dpia_reason": "Minimal personal data processing",
+      "automated_decision_making": "none",
+      "cnil_compliance_notes": [
+        "Minimal data collection",
+        "6-month retention period",
+        "No stack traces or sensitive info exposed to users"
+      ]
+    },
+    {
+      "name": "tls_certificates",
+      "category": "security_configuration",
+      "purpose": "encryption_and_authentication",
+      "description": "TLS/SSL certificates for HTTPS encryption (Let's Encrypt)",
+      "legal_basis": "legal_obligation",
+      "legal_basis_details": "Article 6(1)(c) GDPR - Legal obligation to secure personal data in transit",
+      "retention": "90 days (auto-renewed)",
+      "contains_personal_data": "no",
+      "personal_data_fields": [],
+      "data_subjects": [],
+      "processing_activities": ["tls_encryption", "https_configuration"],
+      "security_measures": [
+        "tls_1_2_minimum",
+        "hsts_enabled",
+        "automatic_renewal",
+        "strong_cipher_suites"
+      ],
+      "data_minimization": {
+        "applied": true,
+        "measures": ["Only domain name in certificate", "No personal data"]
+      },
+      "third_party_sharing": "Let's Encrypt (certificate authority)",
+      "cross_border_transfer": "none",
+      "user_rights": {
+        "access": {
+          "available": false,
+          "reason": "Not personal data"
+        },
+        "rectification": {
+          "available": false,
+          "reason": "Not personal data"
+        },
+        "erasure": {
+          "available": false,
+          "reason": "Not personal data"
+        },
+        "portability": {
+          "available": false,
+          "reason": "Not personal data"
+        }
+      },
+      "dpia_required": false,
+      "dpia_reason": "Not personal data - infrastructure configuration",
+      "automated_decision_making": "none",
+      "cnil_compliance_notes": [
+        "TLS 1.2+ mandatory (CNIL requirement)",
+        "HSTS enabled for enhanced security"
+      ]
+    }
+  ],
+  "data_protection_officer": {
+    "name": "To be defined",
+    "email": "dpo@lexorbital.org",
+    "phone": "To be defined"
+  },
+  "data_controller": {
+    "name": "LexOrbital",
+    "address": "To be defined",
+    "email": "contact@lexorbital.org"
+  },
+  "technical_measures": [
+    "IP pseudonymization (last octet removal)",
+    "server_tokens off (no nginx version disclosure)",
+    "TLS 1.2+ with HSTS",
+    "Security headers (CSP, X-Frame-Options, X-Content-Type-Options, etc.)",
+    "Automatic log rotation and deletion (6 months)",
+    "Access control (root/admin only)",
+    "Encryption at rest and in transit",
+    "Neutral error pages (no technical details exposed)",
+    "Correlation IDs for tracing (not linked to user identity)"
+  ],
+  "organizational_measures": [
+    "Data minimization by design",
+    "Privacy by design in nginx configuration",
+    "Regular security updates and patches",
+    "Incident response procedures",
+    "Access control policies",
+    "Automated certificate renewal"
+  ],
+  "international_transfers": {
+    "applicable": false,
+    "mechanisms": [],
+    "details": "Server infrastructure located within the EU/EEA"
+  },
+  "cookies_and_trackers": {
+    "uses_cookies": false,
+    "uses_trackers": false,
+    "details": "Nginx does not set cookies or trackers"
+  },
+  "children_data": {
+    "processes_children_data": false,
+    "age_verification": "none",
+    "parental_consent": "not_applicable"
+  },
+  "automated_decision_making": {
+    "uses_automated_decisions": false,
+    "uses_profiling": false,
+    "details": "No automated decision-making or profiling at infrastructure level"
+  },
+  "breach_notification": {
+    "procedure_documented": true,
+    "notification_timeline": "72 hours to CNIL if high risk",
+    "contact": "dpo@lexorbital.org"
+  },
+  "audit_log": [
+    {
+      "date": "2025-12-01",
+      "author": "LexOrbital Infrastructure Team",
+      "change": "Added GDPR-compliant error handling (5xx) and logging",
+      "version": "1.0.0"
+    }
+  ],
+  "compliance_certifications": [],
+  "notes": "This module provides GDPR-compliant server infrastructure with IP pseudonymization, secure logging, TLS encryption, and neutral error pages. All configurations follow CNIL and ANSSI recommendations."
+}
+
