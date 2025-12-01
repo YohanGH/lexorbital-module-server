@@ -201,6 +201,8 @@ Ce module fait partie de l'écosystème LexOrbital organisé en anneaux...
 \`\`\`bash
 git clone https://github.com/YohanGH/lexorbital-module-server
 \`\`\`
+
+Voir [Installation](../operations/installation.md) pour le guide complet.
 ```
 
 ---
@@ -394,8 +396,8 @@ Chaque document doit inclure des liens vers :
 ```markdown
 ## 📖 Voir Aussi
 
-- [Prérequis système](./prerequisites.md)
-- [Guide de déploiement](./deployment.md)
+- [Prérequis système](../operations/prerequisites.md)
+- [Guide de déploiement](../operations/deployment.md)
 - [Dépannage](../howto/troubleshooting.md)
 - [← Retour à l'index](../index.md)
 ```

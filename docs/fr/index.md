@@ -76,7 +76,7 @@
 - [Design système](./architecture/system-design.md) - Architecture globale
 - [Infrastructure](./architecture/infrastructure.md) - Docker, Ansible, orchestration
 - [Topologie réseau](./architecture/network-topology.md) - Réseaux et sécurité
-- [Diagrammes](./architecture/diagrams/) - Schémas techniques
+- [Diagrammes](./architecture/diagrams/README.md) - Schémas techniques
 
 ### ⚖️ Conformité
 
@@ -183,7 +183,7 @@ Voir [Guide de contribution](./howto/contribute.md) pour plus de détails.
 
 - **Structure :** Basée sur [lexorbital-template-docs](https://github.com/YohanGH/lexorbital-template-docs)
 - **Style :** [Guide de style LexOrbital](./template/style-guide.md)
-- **Licence :** [MIT](../LICENSE)
+- **Licence :** [MIT](../../LICENSE)
 
 ---
 
