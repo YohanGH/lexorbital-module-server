@@ -23,7 +23,6 @@ Cette documentation couvre tous les aspects du **LexOrbital Module Server**, inc
 - [Design Système](./architecture/system-design.md)
 - [Infrastructure](./architecture/infrastructure.md)
 - [Topologie Réseau](./architecture/network-topology.md)
-- **[🆕 Système de Surveillance](./architecture/surveillance-system-design.md)** ⭐
 
 ### 🔧 Opérations
 
@@ -35,7 +34,6 @@ Cette documentation couvre tous les aspects du **LexOrbital Module Server**, inc
 - [Backup & Recovery](./operations/backup-recovery.md)
 - [Maintenance](./operations/maintenance.md)
 - [Monitoring](./operations/monitoring.md)
-- **[🆕 Guide de Surveillance](./operations/surveillance-guide.md)** ⭐
 
 ### 🔒 Sécurité
 
@@ -52,7 +50,6 @@ Cette documentation couvre tous les aspects du **LexOrbital Module Server**, inc
 - [Standards de Sécurité](./compliance/security-standards.md)
 - [Politique de Logging](./compliance/logging-policy.md)
 - [Rétention des Données](./compliance/data-retention.md)
-- **[🆕 RGPD - Surveillance](./compliance/surveillance-gdpr.md)** ⭐
 
 ### 📘 Référence
 
@@ -73,18 +70,8 @@ Cette documentation couvre tous les aspects du **LexOrbital Module Server**, inc
 
 ---
 
-## 🆕 Système de Surveillance
-
-Le nouveau système de surveillance LexOrbital offre une **surveillance multi-couches complète** de votre infrastructure.
 
 ### 🌟 Fonctionnalités
-
-✅ **5 Modules de Surveillance** :
-- 🖥️ **Resources** : CPU, RAM, disque, I/O
-- 🔒 **Security** : SSH, brute-force, sudo, authentification
-- ⚙️ **Services** : Systemd, Docker, Nginx, journaux critiques
-- 🌐 **Network** : Ports ouverts, firewall, connexions
-- 🔐 **Integrity** : Checksums fichiers, permissions
 
 ✅ **Rapports JSON structurés** consommables par API  
 ✅ **Automatisation** via systemd timers  
@@ -92,16 +79,6 @@ Le nouveau système de surveillance LexOrbital offre une **surveillance multi-co
 ✅ **RGPD-compliant** by design (pseudonymisation, rétention)  
 ✅ **Tests** unitaires et d'intégration  
 ✅ **Documentation** complète
-
-### 📚 Documentation Surveillance
-
-| Document | Description |
-|----------|-------------|
-| [🏗️ Architecture](./architecture/surveillance-system-design.md) | Design complet du système |
-| [📖 Guide Opérationnel](./operations/surveillance-guide.md) | Installation, configuration, usage |
-| [🔒 Conformité RGPD](./compliance/surveillance-gdpr.md) | Mesures RGPD, registre des traitements |
-| [🚀 Quick Start](../SURVEILLANCE-QUICKSTART.md) | Démarrage rapide (5 min) |
-| [📦 README](../monitoring/README.md) | Vue d'ensemble technique |
 
 ## 🚀 Démarrage Rapide Global
 

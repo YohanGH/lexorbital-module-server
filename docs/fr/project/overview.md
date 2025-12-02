@@ -185,7 +185,6 @@ Fournir une infrastructure serveur **clé en main** pour déployer des applicati
 ## 📖 Voir Aussi
 
 - [Architecture Système](../architecture/system-design.md) - Design technique
-- [Feuille de route](./roadmap.md) - Évolution détaillée
 - [Conformité RGPD](../compliance/overview.md) - Mesures compliance
 - [← Retour à l'index](../index.md)
 
